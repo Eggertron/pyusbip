@@ -1,0 +1,6 @@
+{
+    "image": "python:latest",
+    "extensions": [
+        "ms-python.python"
+    ]
+}
