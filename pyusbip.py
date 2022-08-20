@@ -8,8 +8,12 @@ logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 class UsbIpServer():
     def __init__(self):
-        pass
+        self.start_daemon()
     
+    def start_daemon(self):
+        stdout = check_output(["usbipd", "-D"]).decode()
+        return stdout.split('\n')
+
     def get_devices_list(self):
         result = list()
         stdout = check_output("lsusb").decode()
@@ -18,7 +22,7 @@ class UsbIpServer():
                 continue
             lane, id = line.split(':', maxsplit=1)
             lanes = lane.split()
-            ids = id.split(' ', maxsplit=2)
+            ids = id.strip().split(' ', maxsplit=2)
             hash = {
                 "Bus": lanes[1],
                 "Device": lanes[3],
@@ -27,6 +31,24 @@ class UsbIpServer():
             }
             result.append(hash)
         return result
+
+    def get_bus_id(self, usbid:str):
+        stdout = check_output(["usbip", "list", "-p", "-l"]).decode()
+        for line in stdout.split('\n'):
+            if not line:
+                continue
+            if usbid in line:
+                kv, _ = line.split('#', maxsplit=1)
+                return kv.split('=')[1]
+        return None
+
+    def bind_bus_id(self, busid:str):
+        try:
+            stdout = check_output(["usbip", "bind", f"--busid={busid}"]).decode()
+        except Exception as e:
+            logging.error(e)
+            stdout = e.stdout
+        return stdout
 
 class UsbIp():
     def __init__(self, usbip_server=None, usbip_path=None):
@@ -95,3 +117,4 @@ logging.basicConfig(level=logging.DEBUG)
 
 u = UsbIpServer()
 print(u.get_devices_list())
+print(u.bind_bus_id(u.get_bus_id("045e:0294")))
