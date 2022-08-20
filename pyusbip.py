@@ -104,17 +104,3 @@ class UsbIp():
         return check_output(cmd).decode()
 
 
-logging.basicConfig(level=logging.DEBUG)
-# current path for my ubuntu
-#usbip_path = os.path.join(os.sep, "usr", "lib", "linux-tools-5.4.0-104", "usbip")
-#usbip_path = os.path.join(os.sep, "usr", "sbin", "usbip")
-
-#usbip = UsbIp(usbip_server="192.168.50.250", usbip_path=usbip_path)
-#usbip.load_modules()
-#print(usbip.get_version())
-#print(usbip.list_devices())
-#print(usbip.list_connected())
-
-u = UsbIpServer()
-print(u.get_devices_list())
-print(u.bind_bus_id(u.get_bus_id("045e:0294")))

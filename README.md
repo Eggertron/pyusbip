@@ -6,6 +6,7 @@ PyUSBIP
 
 - Python 3
 - USBIP package
+- Flask
 
 ## Server Setup
 

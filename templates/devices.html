@@ -1,0 +1,13 @@
+<html>
+<head>
+<title>USBI IP Devices List</title>
+</head>
+
+<body>
+  <select name='devices' id="devices">
+  {% for device in devices %}
+    <option value="{{ device["ID"] }}">{{ device }}</option>
+  {% endfor %}
+  </select>
+</body>
+</html>
